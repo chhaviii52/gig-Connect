@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import WorkerList from './components/worker';
 import WRegister from './components/WRegister';
+import Howitwrks from './components/Howitwrks';
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
           <Route path="/worker" element={<WorkerList/>} />
           <Route path="/wregister" element={<WRegister/>} />
+          <Route path="/how-it-works" element={<Howitwrks/>} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
+import Navbar from './Navbar';
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email"),
@@ -73,6 +73,7 @@ const AnimatedForm: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 mt-10">
+        <Navbar/>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

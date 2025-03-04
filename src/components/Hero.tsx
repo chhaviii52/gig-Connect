@@ -50,7 +50,7 @@ const Hero = () => {
                 </Dialog>
                 
                 <Button size="lg" variant="outline">
-                  <a href="/register" className="flex items-center">
+                  <a href="/WRegister" className="flex items-center">
                     Become a worker
                   </a>
                 </Button>
