@@ -24,9 +24,7 @@ India has millions of informal workers, such as plumbers, electricians, drivers,
 ## 🛠️ Tech Stack
 | Feature                | Tech Stack                              |
 |-----------------------|--------------------------------------|
-| **Profile & Verification** | Firebase Auth (or Supabase) + KYC Integration |
-| **Search & Filters**   | Elasticsearch for optimized search |
-| **Booking System**     | React Calendar + Firebase DB       |
+| **Profile & Verification** | Firebase Auth (or Supabase) + KYC Integration |      |
 | **Chat & Notifications** | WebSockets for real-time interaction |
 | **Payments & Earnings** | Razorpay / Stripe for secure payments |
 | **Reviews & Ratings**  | Firestore DB with a weighted rating system |
