@@ -6,19 +6,21 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { Mail, Lock, User, ArrowRight, Check } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom'; // Import React Router navigation
 interface AuthModalProps {
   initialView?: 'login' | 'signup';
+  setUser: (user: { name: string; email: string }) => void; // Function to update auth state
 }
 
-const AuthModal = ({ initialView = 'login' }: AuthModalProps) => {
+const AuthModal = ({ initialView = 'login', setUser }: AuthModalProps) => {
+  const navigate = useNavigate(); // React Router navigation
   const [view, setView] = useState<'login' | 'signup'>(initialView);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const { toast } = useToast();
-
+     
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -26,17 +28,20 @@ const AuthModal = ({ initialView = 'login' }: AuthModalProps) => {
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
-      if (view === 'login') {
-        toast({
-          title: "Welcome back!",
-          description: "You've successfully logged in.",
-        });
-      } else {
-        toast({
-          title: "Account created!",
-          description: "Your account has been successfully created.",
-        });
-      }
+      const userData = { name: view === 'signup' ? name : "User", email };
+      
+      // Update state with user data
+      setUser(userData);
+
+      toast({
+        title: view === 'login' ? "Welcome back!" : "Account created!",
+        description: view === 'login' 
+          ? "You've successfully logged in." 
+          : "Your account has been successfully created.",
+      });
+
+      // Redirect user to worker.tsx
+      navigate('/worker');
     }, 1500);
   };
 

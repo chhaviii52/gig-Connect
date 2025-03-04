@@ -51,7 +51,7 @@ const Navbar = () => {
             to="/" 
             className="text-xl md:text-2xl font-bold text-foreground transition-colors duration-200 hover:text-primary"
           >
-            Skill<span className="text-primary">Connect</span>
+            Gig<span className="text-primary">Connect</span>
           </Link>
           
           {/* Search Bar (Desktop) */}
@@ -87,15 +87,18 @@ const Navbar = () => {
               Home
             </Link>
             <Link 
-              to="/search" 
+              to="/worker" 
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                isActive('/search') ? 'text-primary' : 'text-foreground/80'
+                isActive('/worker') ? 'text-primary' : 'text-foreground/80'
               }`}
+              onClick={() => {
+                setMobileMenuOpen(false);
+              }}
             >
               Find Workers
             </Link>
             <Link 
-              to="/register" 
+              to="/wregister" 
               className={`text-sm font-medium transition-colors hover:text-primary ${
                 isActive('/register') ? 'text-primary' : 'text-foreground/80'
               }`}
