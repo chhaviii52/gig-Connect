@@ -13,6 +13,7 @@ interface User {
   name?: string;
 }
 
+
 interface NavbarProps {
   user: User | null;
   setUser: (user: User | null) => void;

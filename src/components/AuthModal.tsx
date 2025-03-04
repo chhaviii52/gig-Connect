@@ -19,6 +19,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ initialView = 'login', onAuthSucc
 
   const onSubmit = async (data: Record<string, any>) => {
     setLoading(true);
+    console.log("🔹 Submitting login/signup form...");
+
     const endpoint = view === 'login' 
       ? 'http://localhost:5000/api/context/login' 
       : 'http://localhost:5000/api/context/register';
@@ -34,17 +36,26 @@ const AuthModal: React.FC<AuthModalProps> = ({ initialView = 'login', onAuthSucc
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Something went wrong');
 
+      console.log("✅ Login/signup success! Fetching user data...");
       toast({ title: 'Success', description: `You have successfully ${view}ed!` });
 
       // ✅ Fetch user details after login/signup
       const userRes = await fetch("http://localhost:5000/api/context/user", { credentials: "include" });
       const userData = await userRes.json();
+
       if (userRes.ok) {
-        onAuthSuccess(userData); // ✅ Update state in App
+        console.log("🚀 User data received:", userData);
+        onAuthSuccess(userData);  // ✅ Update state
+        
+        // 🔄 **Force page refresh to reflect changes immediately**
+        window.location.reload();  
+      } else {
+        console.log("⚠️ Error fetching user details:", userData);
       }
 
       reset();
     } catch (error: any) {
+      console.error("❌ Error in AuthModal:", error);
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
     } finally {
       setLoading(false);

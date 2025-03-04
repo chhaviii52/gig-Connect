@@ -113,7 +113,7 @@ type User = {
 type IndexProps = {
   user: User | null;
 };
-const Index: React.FC<IndexProps> = ({ user }) => {
+const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = ({ user, setUser }) => {
   const [isIntersecting, setIsIntersecting] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -160,12 +160,12 @@ const Index: React.FC<IndexProps> = ({ user }) => {
         <div
           className="fixed bottom-0 right-0 w-[400px] h-[600px] bg-white border border-gray-300 shadow-lg rounded-lg p-4 z-[9999] max-h-screen overflow-hidden"
         >
-          <ChatBotAI/>
+          <ChatBotAI />
         </div>
       )}
 
 
-      <Navbar user={user} />
+      <Navbar user={user} setUser={setUser} />
 
       <Hero />
 
