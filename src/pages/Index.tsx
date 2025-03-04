@@ -7,7 +7,8 @@ import WorkerCard, { WorkerData } from "@/components/WorkerCard";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, Award, Shield } from 'lucide-react';
-
+import { MessageCircle } from 'lucide-react';
+import ChatBotAI from '../components/chatbotapi';
 // Sample worker data
 const popularWorkers: WorkerData[] = [
   {
@@ -104,10 +105,17 @@ const testimonials = [
     avatar: "https://randomuser.me/api/portraits/women/23.jpg"
   }
 ];
-
-const Index = () => {
+type User = {
+  id: string;
+  email: string;
+  name?: string;
+};
+type IndexProps = {
+  user: User | null;
+};
+const Index: React.FC<IndexProps> = ({ user }) => {
   const [isIntersecting, setIsIntersecting] = useState<Record<string, boolean>>({});
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -123,27 +131,46 @@ const Index = () => {
       },
       { threshold: 0.1 }
     );
-    
+
     const elements = document.querySelectorAll('.animate-on-scroll');
     elements.forEach((el) => {
       observer.observe(el);
     });
-    
+
     return () => {
       elements.forEach((el) => {
         observer.unobserve(el);
       });
     };
   }, []);
+  const [showChatbot, setShowChatbot] = useState(false);
 
   return (
     <div className="min-h-screen">
-      <Navbar />
-      
+      {/* Chatbot Button */}
+      <button
+        onClick={() => setShowChatbot(!showChatbot)}
+        className="fixed bottom-6 right-6 bg-primary p-3 rounded-full shadow-lg text-white hover:bg-primary-dark transition"
+      >
+        <MessageCircle className="w-6 h-6" />
+      </button>
+
+      {/* Render ChatbotAI Component */}
+      {showChatbot && (
+        <div
+          className="fixed bottom-0 right-0 w-[400px] h-[600px] bg-white border border-gray-300 shadow-lg rounded-lg p-4 z-[9999] max-h-screen overflow-hidden"
+        >
+          <ChatBotAI/>
+        </div>
+      )}
+
+
+      <Navbar user={user} />
+
       <Hero />
-      
+
       <FeaturesSection />
-      
+
       {/* Categories Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -158,15 +185,14 @@ const Index = () => {
               Browse through our diverse range of professional services to find the perfect match for your needs.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {categories.map((category, index) => (
               <div
                 id={`category-${index}`}
                 key={index}
-                className={`animate-on-scroll fade-up p-6 rounded-xl text-center bg-white border border-border shadow-smooth hover:shadow-elevation cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${
-                  isIntersecting[`category-${index}`] ? 'appear' : ''
-                }`}
+                className={`animate-on-scroll fade-up p-6 rounded-xl text-center bg-white border border-border shadow-smooth hover:shadow-elevation cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${isIntersecting[`category-${index}`] ? 'appear' : ''
+                  }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <div className={`w-12 h-12 rounded-full ${category.color} flex items-center justify-center mx-auto mb-4`}>
@@ -176,7 +202,7 @@ const Index = () => {
               </div>
             ))}
           </div>
-          
+
           <div className="text-center mt-10">
             <Button variant="outline" className="group">
               View all categories
@@ -185,7 +211,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Popular Workers Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -207,15 +233,14 @@ const Index = () => {
               </a>
             </Button>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {popularWorkers.map((worker, index) => (
               <div
                 id={`worker-${index}`}
                 key={worker.id}
-                className={`animate-on-scroll fade-up ${
-                  isIntersecting[`worker-${index}`] ? 'appear' : ''
-                }`}
+                className={`animate-on-scroll fade-up ${isIntersecting[`worker-${index}`] ? 'appear' : ''
+                  }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <WorkerCard worker={worker} />
@@ -224,12 +249,12 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Stats Section */}
       <section className="py-16 bg-gradient-to-r from-primary/5 to-primary/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div 
+            <div
               id="stat-1"
               className={`animate-on-scroll fade-up ${isIntersecting['stat-1'] ? 'appear' : ''}`}
             >
@@ -241,8 +266,8 @@ const Index = () => {
                 <p className="text-muted-foreground">Verified Professionals</p>
               </div>
             </div>
-            
-            <div 
+
+            <div
               id="stat-2"
               className={`animate-on-scroll fade-up ${isIntersecting['stat-2'] ? 'appear' : ''}`}
               style={{ transitionDelay: "100ms" }}
@@ -255,8 +280,8 @@ const Index = () => {
                 <p className="text-muted-foreground">Completed Jobs</p>
               </div>
             </div>
-            
-            <div 
+
+            <div
               id="stat-3"
               className={`animate-on-scroll fade-up ${isIntersecting['stat-3'] ? 'appear' : ''}`}
               style={{ transitionDelay: "200ms" }}
@@ -272,7 +297,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Testimonials Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -287,15 +312,14 @@ const Index = () => {
               Don't just take our word for it - hear from our satisfied customers and service providers.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <div
                 id={`testimonial-${index}`}
                 key={testimonial.id}
-                className={`animate-on-scroll fade-up ${
-                  isIntersecting[`testimonial-${index}`] ? 'appear' : ''
-                }`}
+                className={`animate-on-scroll fade-up ${isIntersecting[`testimonial-${index}`] ? 'appear' : ''
+                  }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <div className="h-full bg-white p-8 rounded-xl border border-border shadow-smooth">
@@ -324,15 +348,14 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* CTA Section */}
       <section className="py-16 bg-primary/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div 
+          <div
             id="cta"
-            className={`max-w-3xl mx-auto text-center animate-on-scroll fade-up ${
-              isIntersecting['cta'] ? 'appear' : ''
-            }`}
+            className={`max-w-3xl mx-auto text-center animate-on-scroll fade-up ${isIntersecting['cta'] ? 'appear' : ''
+              }`}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to find the perfect professional for your job?
@@ -351,7 +374,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       <Footer />
     </div>
   );

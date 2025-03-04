@@ -1,31 +1,41 @@
-
-import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { MenuIcon, X, Search, User } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import AuthModal from './AuthModal';
+import AuthModal from "./AuthModal";
 
-const Navbar = () => {
+// Define User type
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+}
+
+interface NavbarProps {
+  user: User | null;
+  setUser: (user: User | null) => void;
+}
+const navLinks: { path: string; label: string }[] = [
+  { path: "/", label: "Home" },
+  { path: "/worker", label: "Find Workers" },
+  { path: "/wregister", label: "Become a Worker" },
+  { path: "/how-it-works", label: "How It Works" },
+];
+const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Check if the page has been scrolled
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 20);
     };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
@@ -34,151 +44,111 @@ const Navbar = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery('');
+      setSearchQuery("");
     }
+  };
+
+  const handleLogout = async () => {
+    await fetch("http://localhost:5000/api/context/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    setUser(null);
   };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"
         }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="text-xl md:text-2xl font-bold text-foreground transition-colors duration-200 hover:text-primary"
-          >
+          <Link to="/" className="text-xl md:text-2xl font-bold text-foreground hover:text-primary">
             Gig<span className="text-primary">Connect</span>
           </Link>
 
-          
-
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <Link
-              to="/"
-              className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/') ? 'text-primary' : 'text-foreground/80'
-                }`}
-            >
-              Home
-            </Link>
-            <Link
-              to="/worker"
-              className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/worker') ? 'text-primary' : 'text-foreground/80'
-                }`}
-              onClick={() => {
-                setMobileMenuOpen(false);
-              }}
-            >
-              Find Workers
-            </Link>
-            <Link
-              to="/wregister"
-              className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/register') ? 'text-primary' : 'text-foreground/80'
-                }`}
-            >
-              Become a Worker
-            </Link>
-            <Link
-              to="/how-it-works"
-              className={`text-sm font-medium transition-colors hover:text-primary ${isActive('/how-it-works') ? 'text-primary' : 'text-foreground/80'
-                }`}
-            >
-              How It Works
-            </Link>
+            {navLinks.map(({ path, label }) => (
+              <Link
+                key={path}
+                to={path}
+                className={`text-sm font-medium transition-colors hover:text-primary ${isActive(path) ? "text-primary" : "text-foreground/80"
+                  }`}
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
 
-          {/* Actions */}
           <div className="flex items-center space-x-4">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="hidden md:flex">
-                  Log in <User className="ml-1.5 h-4 w-4" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <AuthModal />
-              </DialogContent>
-            </Dialog>
+            {user ? (
+              <div className="relative flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-full shadow-sm hover:shadow-md">
+                <User className="h-5 w-5 text-gray-700" />
+                <span className="text-sm font-medium text-gray-900">{user.name || user.email}</span>
+                <button onClick={handleLogout} className="text-sm text-red-600 hover:underline ml-2">
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm" className="hidden md:flex">
+                      Log in <User className="ml-1.5 h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <AuthModal onAuthSuccess={setUser} />
+                  </DialogContent>
+                </Dialog>
 
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button size="sm" className="hidden md:flex shadow-button">
-                  Sign up
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <AuthModal initialView="signup" />
-              </DialogContent>
-            </Dialog>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="sm" className="hidden md:flex shadow-button">
+                      Sign up
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <AuthModal initialView="signup" onAuthSuccess={setUser} />
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
 
-            {/* Mobile menu button */}
-            <button
-              className="inline-flex items-center justify-center p-2 rounded-md text-foreground md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
-              ) : (
-                <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-              )}
+            <button className="md:hidden p-2 rounded-md" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white animate-fade-in shadow-elevation">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {/* Mobile Search */}
-            <form onSubmit={handleSearch} className="p-3">
-              <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search workers..."
-                  className="pl-10 pr-4 py-2 w-full"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </form>
+        <div className="md:hidden bg-white animate-fade-in shadow-lg px-3 py-3">
+          <form onSubmit={handleSearch} className="p-3">
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search workers..."
+                className="pl-10 pr-4 py-2 w-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </form>
+          {["/", "/worker", "/wregister"].map((path, idx) => (
+            <Link
+              key={idx}
+              to={path}
+              className={`block px-3 py-3 rounded-md text-base font-medium ${isActive(path) ? "text-primary" : "text-foreground/80"
+                }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {path === "/" ? "Home" : path.replace("/", "").replace("-", " ")}
+            </Link>
+          ))}
 
-            <Link
-              to="/"
-              className={`block px-3 py-3 rounded-md text-base font-medium ${isActive('/') ? 'text-primary' : 'text-foreground/80'
-                }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              to="/search"
-              className={`block px-3 py-3 rounded-md text-base font-medium ${isActive('/search') ? 'text-primary' : 'text-foreground/80'
-                }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Find Workers
-            </Link>
-            <Link
-              to="/register"
-              className={`block px-3 py-3 rounded-md text-base font-medium ${isActive('/register') ? 'text-primary' : 'text-foreground/80'
-                }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Become a Worker
-            </Link>
-            <Link
-              to="/how-it-works"
-              className={`block px-3 py-3 rounded-md text-base font-medium ${isActive('/how-it-works') ? 'text-primary' : 'text-foreground/80'
-                }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              How It Works
-            </Link>
+          {!user && (
             <div className="pt-4 flex space-x-3 px-3">
               <Dialog>
                 <DialogTrigger asChild>
@@ -187,7 +157,7 @@ const Navbar = () => {
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
-                  <AuthModal />
+                  <AuthModal onAuthSuccess={setUser} />
                 </DialogContent>
               </Dialog>
 
@@ -198,11 +168,11 @@ const Navbar = () => {
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
-                  <AuthModal initialView="signup" />
+                  <AuthModal initialView="signup" onAuthSuccess={setUser} />
                 </DialogContent>
               </Dialog>
             </div>
-          </div>
+          )}
         </div>
       )}
     </header>
