@@ -71,14 +71,14 @@ const popularWorkers: WorkerData[] = [
 
 // Categories with icons
 const categories = [
-  { name: "Plumbing", icon: "🔧", color: "bg-blue-100" },
-  { name: "Electrical", icon: "⚡", color: "bg-yellow-100" },
-  { name: "Carpentry", icon: "🪚", color: "bg-amber-100" },
+  { name: "Plumber", icon: "🔧", color: "bg-blue-100" },
+  { name: "Electrician", icon: "⚡", color: "bg-yellow-100" },
+  { name: "Carpenter", icon: "🪚", color: "bg-amber-100" },
   { name: "Cleaning", icon: "🧹", color: "bg-green-100" },
-  { name: "Painting", icon: "🖌️", color: "bg-purple-100" },
-  { name: "Landscaping", icon: "🌱", color: "bg-emerald-100" },
+  { name: "Driver", icon: "🚘", color: "bg-purple-100" },
+  { name: "Landscaping", icon: "👨‍🔧", color: "bg-emerald-100" },
   { name: "Moving", icon: "📦", color: "bg-orange-100" },
-  { name: "HVAC", icon: "❄️", color: "bg-cyan-100" }
+  { name: "Mason", icon: "🧱", color: "bg-cyan-100" }
 ];
 
 // Testimonials
@@ -179,10 +179,10 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
               Service Categories
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Find the right professional for any job
+              Find the right skilled worker 
             </h2>
             <p className="text-lg text-muted-foreground">
-              Browse through our diverse range of professional services to find the perfect match for your needs.
+              Browse through our diverse service categories to find the perfect match for your need.
             </p>
           </div>
 
@@ -218,13 +218,13 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
             <div className="max-w-2xl">
               <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-                Top Professionals
+               Best reviewed workers
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Our most in-demand workers
+              <h2 className="text-2xl md:text-4xl font-bold mb-4">
+                Our most in-demand workers near you !
               </h2>
               <p className="text-lg text-muted-foreground">
-                Discover the highest-rated professionals on our platform, ready to help with your projects.
+                Workers will be verified one the basis of their reviews.
               </p>
             </div>
             <Button asChild>
@@ -263,7 +263,7 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
                   <Users className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-4xl font-bold mb-2">5,000+</h3>
-                <p className="text-muted-foreground">Verified Professionals</p>
+                <p className="text-muted-foreground">Verified Workers</p>
               </div>
             </div>
 
@@ -306,11 +306,8 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
               Testimonials
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              What our users are saying
+              We would love to hear from you !
             </h2>
-            <p className="text-lg text-muted-foreground">
-              Don't just take our word for it - hear from our satisfied customers and service providers.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -358,10 +355,10 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
               }`}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to find the perfect professional for your job?
+            Ready to hire the right worker for your job?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Join thousands of satisfied customers who have found reliable professionals through SkillConnect.
+              Thousand problems , one solution : GigConnect.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="shadow-button">
