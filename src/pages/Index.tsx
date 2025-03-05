@@ -75,7 +75,7 @@ const categories = [
   { name: "Electrician", icon: "⚡", color: "bg-yellow-100" },
   { name: "Carpenter", icon: "🪚", color: "bg-amber-100" },
   { name: "Cleaning", icon: "🧹", color: "bg-green-100" },
-  { name: "Driver", icon: "🚘", color: "bg-purple-100" },
+  { name: "Painting", icon: "🖌", color: "bg-purple-100" },
   { name: "Landscaping", icon: "👨‍🔧", color: "bg-emerald-100" },
   { name: "Moving", icon: "📦", color: "bg-orange-100" },
   { name: "Mason", icon: "🧱", color: "bg-cyan-100" }
