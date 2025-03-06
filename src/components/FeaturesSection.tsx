@@ -13,8 +13,8 @@ const features = [
   },
   {
     icon: UserCheck,
-    title: "Verified Professionals",
-    description: "All workers undergo ID verification and skill validation before joining our platform."
+    title: "Verified Workers",
+    description: "All workers undergo ID verification (assigned by our agency) and skill validation before joining our platform."
   },
   {
     icon: Calendar,
@@ -88,7 +88,7 @@ const FeaturesSection = () => {
             A complete platform for worker-client connections
           </h2>
           <p className="text-lg text-muted-foreground">
-            SkillConnect offers a seamless experience from finding the right professional to completing your project with confidence.
+            GigConnect offers a seamless experience from finding the right worker to completing your task with perfection.
           </p>
         </div>
         
