@@ -36,8 +36,24 @@ const AuthModal: React.FC<AuthModalProps> = ({ initialView = 'login', onAuthSucc
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Something went wrong');
 
-      console.log("✅ Login/signup success! Fetching user data...");
+      console.log("✅ Signup/Login success!", result);
       toast({ title: 'Success', description: `You have successfully ${view}ed!` });
+
+      // ✅ If user signed up, automatically log them in
+      if (view === 'signup') {
+        console.log("🔄 Automatically logging in after signup...");
+        const loginRes = await fetch("http://localhost:5000/api/context/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: data.email, password: data.password }),
+          credentials: "include",
+        });
+
+        const loginData = await loginRes.json();
+        if (!loginRes.ok) throw new Error(loginData.message || "Login failed after signup");
+
+        console.log("🚀 Auto-login success!", loginData);
+      }
 
       // ✅ Fetch user details after login/signup
       const userRes = await fetch("http://localhost:5000/api/context/user", { credentials: "include" });
@@ -46,7 +62,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ initialView = 'login', onAuthSucc
       if (userRes.ok) {
         console.log("🚀 User data received:", userData);
         onAuthSuccess(userData);  // ✅ Update state
-        
         // 🔄 **Force page refresh to reflect changes immediately**
         window.location.reload();  
       } else {

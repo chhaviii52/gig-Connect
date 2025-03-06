@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
 import WorkerCard from "./WorkerCard"; // Import WorkerCard
-
+import { useEffect } from 'react'
 const workers = [
   {
     id: "1",
@@ -109,7 +109,18 @@ const workers = [
   }
 ];
 
-const WorkerList = () => {
+type User = {
+  id: string;
+  email: string;
+  name?: string;
+};
+
+type WorkerListProps = {
+  user: User | null;
+  setUser: (user: User | null) => void;
+};
+
+const WorkerList: React.FC<WorkerListProps> = ({ user, setUser }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [location, setLocation] = useState("");
 
@@ -118,49 +129,74 @@ const WorkerList = () => {
     worker.profession.toLowerCase().includes(searchTerm.toLowerCase()) &&
     worker.location.toLowerCase().includes(location.toLowerCase())
   );
+  useEffect(() => {
+    if (!user) {
+      const fetchUser = async () => {
+        try {
+          const res = await fetch("http://localhost:5000/api/context/user", {
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (res.ok) {
+            setUser(data);
+          }
+        } catch (error) {
+          console.error("Failed to fetch user:", error);
+        }
+      };
+
+      fetchUser();
+    }
+  }, [user, setUser]); // Runs when `user` state changes
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar user={user} setUser={setUser} />
 
-      {/* Page Content */}
-      <div className="flex flex-col items-center p-6 mt-20">
-        {/* Search Filters */}
-        <div className="w-full max-w-xl mb-6 space-y-4">
-          {/* Location Input */}
-          <input
-            type="text"
-            placeholder="Enter Location (e.g. New York, San Francisco)"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
-          />
+      {/* Show Find Worker section only when user is signed in */}
+      {user ? (
+        <div className="flex flex-col items-center p-6 mt-20">
+          {/* Search Filters */}
+          <div className="w-full max-w-xl mb-6 space-y-4">
+            <input
+              type="text"
+              placeholder="Enter Location (e.g. New York, San Francisco)"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+            />
 
-          {/* Profession Input */}
-          <input
-            type="text"
-            placeholder="Search by profession (e.g. plumber, electrician)"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
-          />
-        </div>
+            <input
+              type="text"
+              placeholder="Search by profession (e.g. plumber, electrician)"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+            />
+          </div>
 
-        {/* Worker List */}
-        <div className="w-full max-w-7xl">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredWorkers.length > 0 ? (
-              filteredWorkers.map((worker) => (
-                <WorkerCard key={worker.id} worker={worker} />
-              ))
-            ) : (
-              <p className="text-gray-500 text-center w-full col-span-full">
-                No workers found.
-              </p>
-            )}
+          {/* Worker List */}
+          <div className="w-full max-w-7xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredWorkers.length > 0 ? (
+                filteredWorkers.map((worker) => (
+                  <WorkerCard key={worker.id} worker={worker} />
+                ))
+              ) : (
+                <p className="text-gray-500 text-center w-full col-span-full">
+                  No workers found.
+                </p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-col justify-center items-center h-[80vh]">
+          <p className="text-center text-gray-600 text-2xl font-semibold">
+            Please <span className="text-blue-500">sign in</span> to view available workers.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -27,11 +27,18 @@ const steps = [
     image: "/images/job-done.jpg",
   }
 ];
-
-const Howitwrks = () => {
+type User = {
+  id: string;
+  email: string;
+  name?: string;
+};
+type IndexProps = {
+  user: User | null;
+};
+const Howitwrks : React.FC<IndexProps & { setUser: (user: User | null) => void }> = ({ user, setUser }) => {
   return (
     <div className="w-full">
-      <Navbar />
+      <Navbar user={user} setUser={setUser} />
       {/* Hero Section */}
       <section className="relative bg-cover bg-center h-[350px] flex items-center justify-center text-white text-center px-6"
         style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}>

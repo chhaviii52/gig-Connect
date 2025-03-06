@@ -1,4 +1,4 @@
-
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from 'react';
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -156,13 +156,34 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
       </button>
 
       {/* Render ChatbotAI Component */}
-      {showChatbot && (
-        <div
-          className="fixed bottom-0 right-0 w-[400px] h-[600px] bg-white border border-gray-300 shadow-lg rounded-lg p-4 z-[9999] max-h-screen overflow-hidden"
-        >
-          <ChatBotAI />
-        </div>
-      )}
+      <AnimatePresence>
+        {showChatbot && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }} // 🔹 Start hidden below
+            animate={{ opacity: 1, y: 0 }} // 🔹 Animate in smoothly
+            exit={{ opacity: 0, y: 50 }} // 🔹 Exit smoothly
+            transition={{ duration: 0.3, ease: "easeInOut" }} // 🔹 Smooth transition
+            className="fixed bottom-5 right-5 w-[400px] h-[600px] bg-white border border-gray-300 shadow-lg rounded-lg p-4 z-[9999] max-h-screen overflow-hidden"
+          >
+            {/* Close Button with Margin */}
+            <button
+              onClick={() => setShowChatbot(false)}
+              className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 transition mt-9"
+            >
+              ✖
+            </button>
+
+            {/* Greeting Text (Like WhatsApp) */}
+            <div className="text-center text-lg font-semibold text-gray-800 mb-3 pt-2">
+              Namaste 🙏, mai apki kya madat kar sakta hun?
+            </div>
+
+            {/* Chatbot Component */}
+            <ChatBotAI />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
 
 
       <Navbar user={user} setUser={setUser} />
