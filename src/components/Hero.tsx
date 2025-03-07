@@ -33,7 +33,7 @@ const Hero = () => {
               </h1>
               
               <p className="text-lg text-muted-foreground">
-                Connect with verified professionals for all your service needs. From plumbing to carpentry, electrical work to landscaping – quality service is just a click away.
+                Connect with verified and experienced workers for all your service needs. From plumbing to carpentry, electrical work to mechanical – quality service is just a click away.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
@@ -88,7 +88,7 @@ const Hero = () => {
                 {/* Image 1 - Plumber */}
                 <div className="rounded-lg overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+                    src="src/images/img1.jpg"
                     alt="Plumber" 
                     className="w-full h-full object-cover"
                   />
@@ -97,7 +97,7 @@ const Hero = () => {
                 {/* Image 2 - Electrician */}
                 <div className="rounded-lg overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+                    src="src/images/img2.jpg"
                     alt="Electrician" 
                     className="w-full h-full object-cover"
                   />
@@ -106,7 +106,7 @@ const Hero = () => {
                 {/* Image 3 - Carpenter */}
                 <div className="rounded-lg overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+                    src="src/images/img3.jpg" 
                     alt="Carpenter" 
                     className="w-full h-full object-cover"
                   />
@@ -115,7 +115,7 @@ const Hero = () => {
                 {/* Image 4 - Gardener */}
                 <div className="rounded-lg overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" 
+                    src="src/images/img4.jpg" 
                     alt="Gardener" 
                     className="w-full h-full object-cover"
                   />

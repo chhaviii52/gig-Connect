@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 
 const categories = [
   "Plumbing",
-  "Electrical",
+  "Electrician",
   "Carpentry",
   "Painting",
   "Cleaning",

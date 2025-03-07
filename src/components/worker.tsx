@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import WorkerCard from "./WorkerCard"; // Import WorkerCard
-import { useEffect } from 'react'
+import WorkerCard from "./WorkerCard";
+import { Mic } from "lucide-react";
+
 const workers = [
   {
     id: "1",
@@ -121,71 +122,69 @@ type WorkerListProps = {
 };
 
 const WorkerList: React.FC<WorkerListProps> = ({ user, setUser }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [location, setLocation] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
 
-  // Filter workers based on search term and location
-  const filteredWorkers = workers.filter((worker) =>
-    worker.profession.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    worker.location.toLowerCase().includes(location.toLowerCase())
+  const startVoiceRecognition = (setFunction: (text: string) => void) => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-US";
+    recognition.start();
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const transcript = event.results[0][0].transcript;
+      setFunction(transcript);
+    };
+  };
+
+  const filteredWorkers = workers.filter(
+    (worker) =>
+      (searchTerm === "" || worker.profession.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (location === "" || worker.location.toLowerCase().includes(location.toLowerCase()))
   );
-  useEffect(() => {
-    if (!user) {
-      const fetchUser = async () => {
-        try {
-          const res = await fetch("http://localhost:5000/api/context/user", {
-            credentials: "include",
-          });
-          const data = await res.json();
-          if (res.ok) {
-            setUser(data);
-          }
-        } catch (error) {
-          console.error("Failed to fetch user:", error);
-        }
-      };
-
-      fetchUser();
-    }
-  }, [user, setUser]); // Runs when `user` state changes
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
       <Navbar user={user} setUser={setUser} />
-
-      {/* Show Find Worker section only when user is signed in */}
       {user ? (
         <div className="flex flex-col items-center p-6 mt-20">
-          {/* Search Filters */}
           <div className="w-full max-w-xl mb-6 space-y-4">
-            <input
-              type="text"
-              placeholder="Enter Location (e.g. New York, San Francisco)"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
-            />
-
-            <input
-              type="text"
-              placeholder="Search by profession (e.g. plumber, electrician)"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
-            />
+            <div className="relative flex items-center">
+            <label className="mr-2 text-gray-700 font-medium">Location:</label>
+              <input
+                type="text"
+                placeholder="Enter Location (e.g. Hamirpur, Nadaun)"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+              />
+              <Mic
+                className="absolute right-3 text-gray-500 cursor-pointer hover:text-blue-500"
+                size={24}
+                onClick={() => startVoiceRecognition(setLocation)}
+              />
+            </div>
+            <div className="relative flex items-center">
+            <label className="mr-2 text-gray-700 font-medium">Profession:</label>
+              <input
+                type="text"
+                placeholder="Search by profession (e.g. plumber, electrician)"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+              />
+              <Mic
+                className="absolute right-3 text-gray-500 cursor-pointer hover:text-blue-500"
+                size={24}
+                onClick={() => startVoiceRecognition(setSearchTerm)}
+              />
+            </div>
           </div>
-
-          {/* Worker List */}
           <div className="w-full max-w-7xl">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredWorkers.length > 0 ? (
-                filteredWorkers.map((worker) => (
-                  <WorkerCard key={worker.id} worker={worker} />
-                ))
+                filteredWorkers.map((worker) => <WorkerCard key={worker.id} worker={worker} />)
               ) : (
-                <p className="text-gray-500 text-center w-full col-span-full">
-                  No workers found.
-                </p>
+                <p className="text-gray-500 text-center w-full col-span-full">No workers found.</p>
               )}
             </div>
           </div>

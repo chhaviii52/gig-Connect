@@ -71,14 +71,14 @@ const popularWorkers: WorkerData[] = [
 
 // Categories with icons
 const categories = [
-  { name: "Plumbing", icon: "🔧", color: "bg-blue-100" },
-  { name: "Electrical", icon: "⚡", color: "bg-yellow-100" },
-  { name: "Carpentry", icon: "🪚", color: "bg-amber-100" },
+  { name: "Plumber", icon: "🔧", color: "bg-blue-100" },
+  { name: "Electrician", icon: "⚡", color: "bg-yellow-100" },
+  { name: "Carpenter", icon: "🪚", color: "bg-amber-100" },
   { name: "Cleaning", icon: "🧹", color: "bg-green-100" },
-  { name: "Painting", icon: "🖌️", color: "bg-purple-100" },
-  { name: "Landscaping", icon: "🌱", color: "bg-emerald-100" },
+  { name: "Painting", icon: "🖌", color: "bg-purple-100" },
+  { name: "Landscaping", icon: "👨‍🔧", color: "bg-emerald-100" },
   { name: "Moving", icon: "📦", color: "bg-orange-100" },
-  { name: "HVAC", icon: "❄️", color: "bg-cyan-100" }
+  { name: "Mason", icon: "🧱", color: "bg-cyan-100" }
 ];
 
 // Testimonials
@@ -157,32 +157,39 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
 
       {/* Render ChatbotAI Component */}
       <AnimatePresence>
-        {showChatbot && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }} // 🔹 Start hidden below
-            animate={{ opacity: 1, y: 0 }} // 🔹 Animate in smoothly
-            exit={{ opacity: 0, y: 50 }} // 🔹 Exit smoothly
-            transition={{ duration: 0.3, ease: "easeInOut" }} // 🔹 Smooth transition
-            className="fixed bottom-5 right-5 w-[400px] h-[600px] bg-white border border-gray-300 shadow-lg rounded-lg p-4 z-[9999] max-h-screen overflow-hidden"
-          >
-            {/* Close Button with Margin */}
-            <button
-              onClick={() => setShowChatbot(false)}
-              className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 transition mt-9"
-            >
-              ✖
-            </button>
+  {showChatbot && (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }} // 🔹 Start smaller & faded
+      animate={{ opacity: 1, scale: 1 }} // 🔹 Expand to full size smoothly
+      exit={{ opacity: 0, scale: 0.8 }} // 🔹 Shrink out on close
+      transition={{ duration: 0.3, ease: "easeInOut" }} // 🔹 Smooth animation
+      className="fixed inset-0 flex items-center justify-center bg-black/40 z-[9999]" // 🔹 Centered & add background overlay
+    >
+      <div className="w-[600px] h-[700px] bg-white border border-gray-300 shadow-2xl rounded-xl p-6 relative max-h-screen flex flex-col">
+        
+        {/* Close Button */}
+        <button
+          onClick={() => setShowChatbot(false)}
+          className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 transition"
+        >
+          ✖
+        </button>
 
-            {/* Greeting Text (Like WhatsApp) */}
-            <div className="text-center text-lg font-semibold text-gray-800 mb-3 pt-2">
-              Namaste 🙏, mai apki kya madat kar sakta hun?
-            </div>
+        {/* Greeting Text */}
+        <div className="text-center text-xl font-semibold text-gray-800 mb-4">
+          🙏 Namaste! Mai aapki kya madad kar sakta hoon?
+        </div>
 
-            {/* Chatbot Component */}
-            <ChatBotAI />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Chatbot Component */}
+        <div className="flex-1 overflow-hidden">
+        {showChatbot && <ChatBotAI onClose={() => setShowChatbot(false)} />}
+
+        </div>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
 
 
 
@@ -200,10 +207,10 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
               Service Categories
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Find the right professional for any job
+              Find the right skilled worker 
             </h2>
             <p className="text-lg text-muted-foreground">
-              Browse through our diverse range of professional services to find the perfect match for your needs.
+              Browse through our diverse service categories to find the perfect match for your need.
             </p>
           </div>
 
@@ -239,13 +246,13 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
             <div className="max-w-2xl">
               <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-                Top Professionals
+               Best reviewed workers
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Our most in-demand workers
+              <h2 className="text-2xl md:text-4xl font-bold mb-4">
+                Our most in-demand workers near you !
               </h2>
               <p className="text-lg text-muted-foreground">
-                Discover the highest-rated professionals on our platform, ready to help with your projects.
+                Workers will be verified one the basis of their reviews.
               </p>
             </div>
             <Button asChild>
@@ -284,7 +291,7 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
                   <Users className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-4xl font-bold mb-2">5,000+</h3>
-                <p className="text-muted-foreground">Verified Professionals</p>
+                <p className="text-muted-foreground">Verified Workers</p>
               </div>
             </div>
 
@@ -327,11 +334,8 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
               Testimonials
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              What our users are saying
+              We would love to hear from you !
             </h2>
-            <p className="text-lg text-muted-foreground">
-              Don't just take our word for it - hear from our satisfied customers and service providers.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -379,10 +383,10 @@ const Index: React.FC<IndexProps & { setUser: (user: User | null) => void }> = (
               }`}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to find the perfect professional for your job?
+            Ready to hire the right worker for your job?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Join thousands of satisfied customers who have found reliable professionals through SkillConnect.
+              Thousand problems , one solution : GigConnect.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="shadow-button">

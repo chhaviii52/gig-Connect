@@ -22,15 +22,18 @@ const WorkerDashboard = ({ worker }: { worker: Worker | null }) => {
     if (!worker) {
       const fetchWorkerData = async () => {
         try {
-          const res = await fetch("http://localhost:5000/apicontext/wData", {
-            credentials: "include",
+          const res = await fetch("http://localhost:5000/api/context/wData", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(worker),
           });
-
+          
           if (!res.ok) {
             throw new Error("Failed to fetch worker data");
           }
-
+          
           const data = await res.json();
+          console.log("the response for worker data:",data);
           setLocalWorker(data);
         } catch (err: any) {
           setError(err.message);

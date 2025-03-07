@@ -11,10 +11,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 mb-8">
           <div className="md:col-span-1">
             <h2 className="text-xl font-bold text-foreground mb-4">
-              Skill<span className="text-primary">Connect</span>
+              Gig<span className="text-primary">Connect</span>
             </h2>
             <p className="text-muted-foreground mb-6">
-              Connecting skilled professionals with customers who need their services.
+            Linking skilled tradespeople, such as plumbers, electricians, and other professionals, with customers requiring their expertise.
             </p>
             <div className="flex space-x-4 mb-6">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
@@ -33,15 +33,15 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 text-muted-foreground mt-0.5" />
-                <span className="text-muted-foreground">contact@skillconnect.com</span>
+                <span className="text-muted-foreground">tchhavi123@gmail.com</span>
               </div>
               <div className="flex items-start space-x-3">
                 <Phone className="w-5 h-5 text-muted-foreground mt-0.5" />
-                <span className="text-muted-foreground">+1 (555) 123-4567</span>
+                <span className="text-muted-foreground">+91 93179 25652</span>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-muted-foreground mt-0.5" />
-                <span className="text-muted-foreground">123 Main St, San Francisco, CA 94105</span>
+                <span className="text-muted-foreground">NIT Hamirpur, Himachal Pradesh</span>
               </div>
             </div>
           </div>
@@ -59,14 +59,14 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="font-semibold text-foreground mb-4">For Professionals</h3>
+            <h3 className="font-semibold text-foreground mb-4">For Workers</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Join as a Professional</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Success Stories</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Pro Resources</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Earning Potential</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Join as a Workers</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Customer Reviews</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Explore Domains</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Income prospects</a></li>
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Community Guidelines</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Professional FAQs</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Workers FAQs</a></li>
             </ul>
           </div>
           
@@ -85,9 +85,6 @@ const Footer = () => {
         <Separator className="my-8" />
         
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} SkillConnect. All rights reserved.
-          </p>
           <div className="flex space-x-6">
             <a href="#" className="text-muted-foreground hover:text-primary text-sm transition-colors">
               Privacy Policy
