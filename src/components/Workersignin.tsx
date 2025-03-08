@@ -21,7 +21,7 @@ const WorkerSignin = ({ setWorker }: { setWorker: (worker: any) => void }) => {
     e.preventDefault();
     try {
       //to fetch the data from the backend to ensure whether worker is already registered or not
-        const res = await fetch("http://localhost:5000/api/context/wsignin", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/context/wsignin`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),

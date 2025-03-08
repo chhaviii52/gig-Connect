@@ -73,7 +73,7 @@ const WorkerDetailsForm: React.FC<WorkerDetailsFormProps> = ({ setRefresh }) => 
         e.preventDefault();
         console.log("📤 Sending Data:", JSON.stringify(formData, null, 2));
         try {
-            const res = await fetch("http://localhost:5000/api/context/workerCredentials", {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/context/workerCredentials`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",

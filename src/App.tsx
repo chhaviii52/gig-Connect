@@ -26,7 +26,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/context/user", { credentials: "include" });
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/context/user`, { credentials: "include" });
         const data: User = await res.json();
         if (res.ok) {
           setUser(data);

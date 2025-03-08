@@ -52,7 +52,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
   };
 
   const handleLogout = async () => {
-    await fetch("http://localhost:5000/api/context/logout", {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/context/logout`, {
       method: "POST",
       credentials: "include",
     });

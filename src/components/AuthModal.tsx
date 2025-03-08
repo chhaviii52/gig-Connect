@@ -22,8 +22,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ initialView = 'login', onAuthSucc
     console.log("🔹 Submitting login/signup form...");
 
     const endpoint = view === 'login' 
-      ? 'http://localhost:5000/api/context/login' 
-      : 'http://localhost:5000/api/context/register';
+      ? `${process.env.REACT_APP_API_URL}/api/context/login` 
+      : `${process.env.REACT_APP_API_URL}/api/context/register`;
 
     try {
       const response = await fetch(endpoint, {
@@ -42,7 +42,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ initialView = 'login', onAuthSucc
       // ✅ If user signed up, automatically log them in
       if (view === 'signup') {
         console.log("🔄 Automatically logging in after signup...");
-        const loginRes = await fetch("http://localhost:5000/api/context/login", {
+        const loginRes = await fetch(`${process.env.REACT_APP_API_URL}/api/context/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: data.email, password: data.password }),
@@ -56,7 +56,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ initialView = 'login', onAuthSucc
       }
 
       // ✅ Fetch user details after login/signup
-      const userRes = await fetch("http://localhost:5000/api/context/user", { credentials: "include" });
+      const userRes = await fetch(`${process.env.REACT_APP_API_URL}/api/context/user`, { credentials: "include" });
       const userData = await userRes.json();
 
       if (userRes.ok) {

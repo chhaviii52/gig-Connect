@@ -14,7 +14,7 @@ const ChatBotAI = ({ onClose }: { onClose: () => void }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/context/chat",
+        `${process.env.REACT_APP_API_URL}/api/context/chat`,
         { message },
         { headers: { "Content-Type": "application/json" } }
       );

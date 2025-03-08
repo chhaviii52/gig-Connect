@@ -40,7 +40,7 @@ const WorkerDashboard = () => {
   useEffect(() => {
     const fetchWorkerData = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/context/wData", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/context/wDat`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -63,7 +63,7 @@ const WorkerDashboard = () => {
       console.log("🔍 Fetching credentials for worker:", worker);
       const fetchCredentials = async () => {
         try {
-          const res = await fetch("http://localhost:5000/api/context/showData", {
+          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/context/showData`, {
             method: "GET",
             credentials: "include",
           });
