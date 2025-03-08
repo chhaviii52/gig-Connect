@@ -104,13 +104,21 @@ const WorkerDashboard = () => {
         {/* Left Section: User Profile */}
         <div className="bg-gray-100 p-4 rounded-lg mb-4">
           <p className="text-gray-600"><strong>Email:</strong> {worker.email}</p>
+          {/* 🔹 Certification Status */}
+          <p className="text-gray-600">
+            <strong>Certification Status:</strong> {credentials?.govtCertifications?.length ? (
+              <span className="text-green-600 font-semibold">Certified ✅</span>
+            ) : (
+              <span className="text-red-500 font-semibold">Uncertified ❌</span>
+            )}
+          </p>
           {credentials && credentials.coordinates && Array.isArray(credentials.coordinates.coordinates) && credentials.coordinates.coordinates.length === 2 ? (
             <>
               <p className="text-gray-600">
                 <strong>Location:</strong> {credentials.location} <br />
                 <strong>Coordinates:</strong> {credentials.coordinates.coordinates[1]}, {credentials.coordinates.coordinates[0]}
               </p>
-              
+
             </>
           ) : (
             <p className="text-gray-500">Coordinates not available</p>
