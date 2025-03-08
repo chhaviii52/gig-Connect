@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import AuthModal from "./AuthModal";
 
+
 // Define User type
 interface User {
   id: string;
@@ -25,6 +26,7 @@ const navLinks: { path: string; label: string }[] = [
   { path: "/how-it-works", label: "How It Works" },
 ];
 const Navbar: React.FC<NavbarProps> = ({ user, setUser }) => {
+  
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");

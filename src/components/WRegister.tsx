@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
+import { motion ,AnimatePresence} from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
-
+import ChatBotAI from "./chatbotapi";
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email"),
@@ -26,6 +26,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const WorkerRegistration: React.FC = () => {
   const navigate = useNavigate();
+  const [showChatbot, setShowChatbot] = useState(false);
   const {
     register,
     handleSubmit,
@@ -47,15 +48,22 @@ const WorkerRegistration: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+    
       const result = await response.json();
+      console.log("Response Status:", response.status);  // Log status
+      console.log("Response Data:", result);  // Log full response
+    
       if (!response.ok) throw new Error(result.message || "Something went wrong");
+    
       setMessage("✅ Registration successful!");
       navigate(`/worker-signin?email=${encodeURIComponent(data.email)}`);
     } catch (error: any) {
-      setMessage(`❌ Error: ${error.message}`);
+      console.error("Error Occurred:", error); // Log exact error
+      setMessage(`❌ Error: User already exist OR ${error.message}`);
     } finally {
       setLoading(false);
     }
+    
   };
 
   return (
@@ -165,6 +173,48 @@ const WorkerRegistration: React.FC = () => {
           </form>
         )}
       </motion.div>
+       {/* 🔹 Chatbot Button */}
+       <button
+        onClick={() => setShowChatbot(true)}
+        className="fixed bottom-6 right-6 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition"
+      >
+        💬 Chat
+      </button>
+
+      {/* 🔹 Chatbot UI */}
+      <AnimatePresence>
+        {showChatbot && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 flex items-center justify-center bg-black/40 z-[9999]"
+          >
+            <div className="w-[600px] h-[700px] bg-white border border-gray-300 shadow-2xl rounded-xl p-6 relative flex flex-col">
+              
+              {/* 🔹 Close Button */}
+              <button
+                onClick={() => setShowChatbot(false)}
+                className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 transition"
+              >
+                ✖
+              </button>
+
+              {/* 🔹 Greeting Text */}
+              <div className="text-center text-xl font-semibold text-gray-800 mb-4">
+                🙏 Namaste! Mai aapki kya madad kar sakta hoon?
+              </div>
+
+              {/* 🔹 Chatbot Component */}
+              <div className="flex-1 overflow-hidden">
+                {showChatbot && <ChatBotAI onClose={() => setShowChatbot(false)} />}
+              </div>
+            </div>
+          </motion.div>
+          )}
+          </AnimatePresence>
+    
     </div>
   );
 };

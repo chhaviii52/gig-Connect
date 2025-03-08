@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import WorkerCard from "./WorkerCard";
+import { useNavigate } from "react-router-dom";
 import { Mic } from "lucide-react";
-
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog"; // ✅ Import Dialog components
+import AuthModal from "./AuthModal";
+import { Button } from "@/components/ui/button";
 const workers = [
   {
     id: "1",
@@ -122,17 +125,38 @@ type WorkerListProps = {
 };
 
 const WorkerList: React.FC<WorkerListProps> = ({ user, setUser }) => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [listening, setListening] = useState(false); // ✅ Controls the dialog visibility
 
   const startVoiceRecognition = (setFunction: (text: string) => void) => {
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      console.error("Speech Recognition is not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
     recognition.lang = "en-US";
+
+    setListening(true); // ✅ Show "Listening..." popup
     recognition.start();
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      const transcript = event.results[0][0].transcript;
+      let transcript = event.results[0][0].transcript.trim();
+      if (transcript.endsWith(".")) {
+        transcript = transcript.slice(0, -1);
+      }
       setFunction(transcript);
+      setListening(false); // ✅ Close dialog after recognition
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event);
+      setListening(false); // ✅ Close dialog on error
     };
   };
 
@@ -145,11 +169,12 @@ const WorkerList: React.FC<WorkerListProps> = ({ user, setUser }) => {
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
       <Navbar user={user} setUser={setUser} />
+
       {user ? (
         <div className="flex flex-col items-center p-6 mt-20">
           <div className="w-full max-w-xl mb-6 space-y-4">
             <div className="relative flex items-center">
-            <label className="mr-2 text-gray-700 font-medium">Location:</label>
+              <label className="mr-2 text-gray-700 font-medium">Location:</label>
               <input
                 type="text"
                 placeholder="Enter Location (e.g. Hamirpur, Nadaun)"
@@ -163,8 +188,9 @@ const WorkerList: React.FC<WorkerListProps> = ({ user, setUser }) => {
                 onClick={() => startVoiceRecognition(setLocation)}
               />
             </div>
+
             <div className="relative flex items-center">
-            <label className="mr-2 text-gray-700 font-medium">Profession:</label>
+              <label className="mr-2 text-gray-700 font-medium">Profession:</label>
               <input
                 type="text"
                 placeholder="Search by profession (e.g. plumber, electrician)"
@@ -179,6 +205,7 @@ const WorkerList: React.FC<WorkerListProps> = ({ user, setUser }) => {
               />
             </div>
           </div>
+
           <div className="w-full max-w-7xl">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredWorkers.length > 0 ? (
@@ -192,10 +219,34 @@ const WorkerList: React.FC<WorkerListProps> = ({ user, setUser }) => {
       ) : (
         <div className="flex flex-col justify-center items-center h-[80vh]">
           <p className="text-center text-gray-600 text-2xl font-semibold">
-            Please <span className="text-blue-500">sign in</span> to view available workers.
+            Please{" "}
+            <Dialog>
+              <DialogTrigger asChild>
+                <span className="text-blue-500 cursor-pointer hover:underline">
+                  sign in
+                </span>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <AuthModal initialView="signup" onAuthSuccess={setUser} />
+              </DialogContent>
+            </Dialog>{" "}
+            to view available workers.
           </p>
         </div>
       )}
+
+      {/* ✅ Listening Dialog with Blinking Mic */}
+      <Dialog open={listening} onOpenChange={setListening}>
+        <DialogContent className="sm:max-w-xs flex flex-col items-center p-6">
+          <div className="text-lg font-semibold text-gray-800">Listening...</div>
+          {/* ✅ Blinking Mic Icon */}
+          <Mic size={50} className="text-red-500 animate-pulse mt-3" />
+          <Button variant="ghost" onClick={() => setListening(false)} className="mt-4 text-red-500">
+            Cancel
+          </Button>
+        </DialogContent>
+      </Dialog>
+
     </div>
   );
 };

@@ -16,28 +16,34 @@ const WorkerSignin = ({ setWorker }: { setWorker: (worker: any) => void }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      const res = await fetch("http://localhost:5000/api/context/wsignin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      });
+      //to fetch the data from the backend to ensure whether worker is already registered or not
+        const res = await fetch("http://localhost:5000/api/context/wsignin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+            credentials: "include",
+        });
 
-      if (res.ok) {
-        const workerData = await res.json();
-        setWorker(workerData); // 🔹 Store worker details
-        navigate("/worker-dashboard"); // 🔹 Redirect to worker dashboard
-      } else {
-        console.error("Sign-in failed");
-      }
+        if (res.ok) {
+            const workerData = await res.json();
+            setWorker(workerData); // 🔹 Store worker details
+            console.log("Worker data:", workerData);
+            
+            // 🔹 Pass worker data when navigating
+            navigate("/worker-dashboard", { state: { worker: workerData.user } });
+
+        } else {
+            console.error("Sign-in failed");
+        }
     } catch (error) {
-      console.error("Error during sign-in:", error);
+        console.error("Error during sign-in:", error);
     }
-  };
+};
+
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-10">

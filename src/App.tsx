@@ -52,7 +52,8 @@ const App: React.FC = () => {
             <Route path="/wregister" element={<WRegister user={user} setUser={setUser} />} />
             <Route path="/how-it-works" element={<Howitwrks user={user} setUser={setUser} />} />
             <Route path="/worker-signin" element={<WorkerSignin setWorker={setWorker}/>}/>
-            <Route path="/worker-dashboard" element={<WorkerDashboard worker={worker}  />} />
+            <Route path="/worker-dashboard" element={<WorkerDashboard />} />
+
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
